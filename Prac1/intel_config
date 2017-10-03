@@ -1,0 +1,10 @@
+-fastfwd 50000000
+-max:inst 10000000
+-fetch:ifqsize 6
+-decode:width 5
+-issue:width 6
+-commit:width 6
+-ruu:size 256	#224
+-lsq:size 64	#56	# 72
+-mem:lat 80 42	#laten 12,75ns enlloc de 80
+-mem:width 64

@@ -1,0 +1,10 @@
+applu.txt:sim_IPC                      2.4279 # instructions per cycle
+applu.txt:sim_CPI                      0.4119 # cycles per instruction
+crafty.txt:sim_IPC                      1.6600 # instructions per cycle
+crafty.txt:sim_CPI                      0.6024 # cycles per instruction
+twolf.txt:sim_IPC                      2.7118 # instructions per cycle
+twolf.txt:sim_CPI                      0.3688 # cycles per instruction
+vortex.txt:sim_IPC                      1.6546 # instructions per cycle
+vortex.txt:sim_CPI                      0.6044 # cycles per instruction
+vpr.txt:sim_IPC                      1.6619 # instructions per cycle
+vpr.txt:sim_CPI                      0.6017 # cycles per instruction

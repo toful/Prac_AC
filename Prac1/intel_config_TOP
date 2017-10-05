@@ -1,8 +1,8 @@
 -fastfwd 50000000
 -max:inst 10000000
 -fetch:ifqsize 6
--decode:width 5
--issue:width 6
+-decode:width 6
+-issue:width 7
 -commit:width 6
 -ruu:size 256
 -lsq:size 64
@@ -13,6 +13,6 @@
 -res:memport 3
 -res:fpalu 3
 -res:fpmult 2
--cache:dl1 dl1:64:64:8:l
+-cache:dl1 dl1:128:64:8:l
 -cache:il1 il1:64:64:8:l
 -cache:dl2 ul2:1024:64:16:l

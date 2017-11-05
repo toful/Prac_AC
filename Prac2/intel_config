@@ -1,0 +1,6 @@
+-fastfwd 50000000
+-max:inst 10000000
+-mem:lat 300 2
+-mem:width 32
+-bpred 2lev
+-bpred:2lev 1 1 16 1

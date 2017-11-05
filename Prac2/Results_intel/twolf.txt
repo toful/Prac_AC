@@ -1,0 +1,60 @@
+sim-outorder: SimpleScalar/Alpha Tool Set version 3.0 of August, 2003.
+Copyright (c) 1994-2003 by Todd M. Austin, Ph.D. and SimpleScalar, LLC.
+All Rights Reserved. This version of SimpleScalar is licensed for academic
+non-commercial use.  No portion of this work may be used by any commercial
+entity, or for any commercial purpose, without the prior written permission
+of SimpleScalar, LLC (info@simplescalar.com).
+
+warning: section `.comment' ignored...
+sim: command line: simplesim-3.0_acx/sim-outorder -config intel_config -redir:sim Results_intel/twolf.txt Benchmarks/twolf/exe/twolf.exe Benchmarks/twolf/data/ref/ref 
+
+sim: simulation started @ Thu Nov  2 09:25:49 2017, options follow:
+
+sim-outorder: This simulator implements a very detailed out-of-order issue
+superscalar processor with a two-level memory system and speculative
+execution support.  This simulator is a performance simulator, tracking the
+latency of all pipeline operations.
+
+# -config                     # load configuration from a file
+# -dumpconfig                 # dump configuration to a file
+# -h                    false # print help message    
+# -v                    false # verbose operation     
+# -d                    false # enable debug message  
+# -i                    false # start in Dlite debugger
+-seed                       1 # random number generator seed (0 for timer seed)
+# -q                    false # initialize and terminate immediately
+# -chkpt               <null> # restore EIO trace execution from <fname>
+# -redir:sim     Results_intel/twolf.txt # redirect simulator output to file (non-interactive only)
+# -redir:prog          <null> # redirect simulated program output to file
+-nice                       0 # simulator scheduling priority
+-max:inst            10000000 # maximum number of inst's to execute
+-fastfwd             50000000 # number of insts skipped before timing starts
+# -ptrace              <null> # generate pipetrace, i.e., <fname|stdout|stderr> <range>
+-fetch:ifqsize              4 # instruction fetch queue size (in insts)
+-fetch:mplat                3 # extra branch mis-prediction latency
+-fetch:speed                1 # speed of front-end of machine relative to execution core
+-bpred                   2lev # branch predictor type {nottaken|taken|perfect|bimod|2lev|comb}
+-bpred:bimod     2048 # bimodal predictor config (<table size>)
+-bpred:2lev      1 1 16 1 # 2-level predictor config (<l1size> <l2size> <hist_size> <xor>)
+-bpred:comb      1024 # combining predictor config (<meta_table_size>)
+-bpred:ras                  8 # return address stack size (0 for no return stack)
+-bpred:btb       512 4 # BTB config (<num_sets> <associativity>)
+# -bpred:spec_update       <null> # speculative predictors update in {ID|WB} (default non-spec)
+-decode:width               4 # instruction decode B/W (insts/cycle)
+-issue:width                4 # instruction issue B/W (insts/cycle)
+-issue:inorder          false # run pipeline with in-order issue
+-issue:wrongpath         true # issue instructions down wrong execution paths
+-commit:width               4 # instruction commit B/W (insts/cycle)
+-ruu:size                  16 # register update unit (RUU) size
+-lsq:size                   8 # load/store queue (LSQ) size
+-cache:dl1       dl1:128:32:4:l # l1 data cache config, i.e., {<config>|none}
+-cache:dl1lat               1 # l1 data cache hit latency (in cycles)
+-cache:dl2       ul2:1024:64:4:l # l2 data cache config, i.e., {<config>|none}
+-cache:dl2lat               6 # l2 data cache hit latency (in cycles)
+-cache:il1       il1:512:32:1:l # l1 inst cache config, i.e., {<config>|dl1|dl2|none}
+-cache:il1lat               1 # l1 instruction cache hit latency (in cycles)
+-cache:il2                dl2 # l2 instruction cache config, i.e., {<config>|dl2|none}
+-cache:il2lat               6 # l2 instruction cache hit latency (in cycles)
+-cache:flush            false # flush caches on system calls
+-cache:icompress        false # convert 64-bit inst addresses to 32-bit inst equivalents
+-mem:lat         300 2 # memory access latency (<first_chunk> <inter_c

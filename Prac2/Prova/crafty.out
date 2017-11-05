@@ -1,0 +1,24 @@
+
+Crafty v14.3
+
+White(1): White(1): pondering disabled.
+White(1): noise level set to 0.
+White(1): search time set to 99999.00.
+White(1): verbosity set to 5.
+White(1): White(1): search depth set to 12.
+White(1): 
+              clearing hash tables
+
+              depth   time  score   variation (1)
+                1   ###.##   4.14   Qxb6
+                1-> ###.##   4.14   Qxb6
+                2   ###.##   4.01   Qxb6 e4
+                2-> ###.##   4.01   Qxb6 e4
+                3   ###.##     ++   Qxb6!!
+                3   ###.##   4.32   Qxb6 Rf6 Qd8+ Kh7
+                3-> ###.##   4.32   Qxb6 Rf6 Qd8+ Kh7
+                4   ###.##   4.22   Qxb6 e4 Qe6 Rf2
+                4-> ###.##   4.22   Qxb6 e4 Qe6 Rf2
+                5   ###.##   4.15   Qxb6 Rf2 Qd8+ Kh7 Qd3+ e4 Qd6
+                5-> ###.##   4.15   Qxb6 Rf2 Qd8+ Kh7 Qd3+ e4 Qd6
+                6   ###.##   4.01   Qxb6 Rf2 Qd8+ Kh7 Qd5 Qe2 b4

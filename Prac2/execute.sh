@@ -24,7 +24,7 @@ cd ../../../../
 
 	simplesim-3.0_acx/sim-outorder -fastfwd 50000000 -max:inst 10000000 ${parameters[$j]} -redir:sim Results/vpr.txt Benchmarks/vpr/exe/vpr.exe Benchmarks/vpr/data/ref/net.in Benchmarks/vpr/data/ref/arch.in Benchmarks/vpr/data/ref/route.out -nodisp -route_only -route_chan_width 15 -pres_fac_mult 2 -acc_fac 1 -first_iter_pres_fac 4 -initial_pres_fac 8 >> Out/vpr.out 2>> Out/vpr.err
 
-	echo $j
+
 	echo ${parameters[$j]}
 	echo \n\n >> _Resultats
 	echo ${parameters[$j]} >> _Resultats

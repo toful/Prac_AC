@@ -70,6 +70,7 @@ bpred_create(enum bpred_class class,	/* type of predictor to create */
 	     unsigned int l2size,	/* 2lev l2 table size */
 	     unsigned int meta_size,	/* meta table size */
 	     unsigned int shift_width,	/* history register width */
+	     unsigned int hist_width,	/* history register width */
 	     unsigned int xor,  	/* history xor address flag */
 	     unsigned int btb_sets,	/* number of sets in BTB */ 
 	     unsigned int btb_assoc,	/* BTB associativity */
@@ -103,7 +104,13 @@ bpred_create(enum bpred_class class,	/* type of predictor to create */
       bpred_dir_create(class, l1size, l2size, shift_width, xor);
 
     break;
+///////////////////////////////////////////////////////////////////////////
+  case BPredALLOYED:
+    pred->dirpred.twolev = 
+      bpred_dir_create(class, l1size, l2size, shift_width, hist_width);
 
+    break;
+///////////////////////////////////////////////////////////////////////////
   case BPred2bit:
     pred->dirpred.bimod = 
       bpred_dir_create(class, bimod_size, 0, 0, 0);
@@ -122,6 +129,9 @@ bpred_create(enum bpred_class class,	/* type of predictor to create */
   case BPredComb:
   case BPred2Level:
   case BPred2bit:
+/////////////////////////////////////////////////
+  case BPredALLOYED:
+/////////////////////////////////////////////////
     {
       int i;
 

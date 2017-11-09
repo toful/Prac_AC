@@ -104,7 +104,8 @@ enum bpred_class {
   BPred2bit,			/* 2-bit saturating cntr pred (dir mapped) */
   BPredTaken,			/* static predict taken */
   BPredNotTaken,		/* static predict not taken */
-  BPred_NUM
+  BPred_NUM,
+  BPredALLOYED			/*Predictor implementat per nosaltres*/
 };
 
 /* an entry in a BTB */
@@ -130,6 +131,9 @@ struct bpred_dir_t {
       int xor;			/* history xor address flag */
       int *shiftregs;		/* level-1 history table */
       unsigned char *l2table;	/* level-2 prediction state table */
+      //elements adicionals per al nostre predictor
+      int hist_width;		/*mida del GBHR*/
+      int *shiftGlobregs;	/*punter GBHR*/
     } two;
   } config;
 };

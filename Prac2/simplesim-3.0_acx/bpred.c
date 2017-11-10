@@ -70,7 +70,9 @@ bpred_create(enum bpred_class class,	/* type of predictor to create */
 	     unsigned int l2size,	/* 2lev l2 table size */
 	     unsigned int meta_size,	/* meta table size */
 	     unsigned int shift_width,	/* history register width */
+////////////////////////////////////////////////////////////////////////////////////
 	     unsigned int hist_width,	/* history register width */
+////////////////////////////////////////////////////////////////////////////////////
 	     unsigned int xor,  	/* history xor address flag */
 	     unsigned int btb_sets,	/* number of sets in BTB */ 
 	     unsigned int btb_assoc,	/* BTB associativity */
@@ -87,33 +89,33 @@ bpred_create(enum bpred_class class,	/* type of predictor to create */
   case BPredComb:
     /* bimodal component */
     pred->dirpred.bimod = 
-      bpred_dir_create(BPred2bit, bimod_size, 0, 0, 0);
+      bpred_dir_create(BPred2bit, bimod_size, 0, 0, 0, 0);
 
     /* 2-level component */
     pred->dirpred.twolev = 
-      bpred_dir_create(BPred2Level, l1size, l2size, shift_width, xor);
+      bpred_dir_create(BPred2Level, l1size, l2size, shift_width, xor, 0);
 
     /* metapredictor component */
     pred->dirpred.meta = 
-      bpred_dir_create(BPred2bit, meta_size, 0, 0, 0);
+      bpred_dir_create(BPred2bit, meta_size, 0, 0, 0, 0);
 
     break;
 
   case BPred2Level:
     pred->dirpred.twolev = 
-      bpred_dir_create(class, l1size, l2size, shift_width, xor);
+      bpred_dir_create(class, l1size, l2size, shift_width, xor, 0);
 
     break;
 ///////////////////////////////////////////////////////////////////////////
   case BPredALLOYED:
-    pred->dirpred.twolev = 
-      bpred_dir_create(class, l1size, l2size, shift_width, hist_width);
+    pred->dirpred.alloy = 
+      bpred_dir_create(class, l1size, l2size, shift_width, 0, hist_width);
 
     break;
 ///////////////////////////////////////////////////////////////////////////
   case BPred2bit:
     pred->dirpred.bimod = 
-      bpred_dir_create(class, bimod_size, 0, 0, 0);
+      bpred_dir_create(class, bimod_size, 0, 0, 0, 0);
 
   case BPredTaken:
   case BPredNotTaken:
@@ -193,7 +195,10 @@ bpred_dir_create (
   unsigned int l1size,	 	/* level-1 table size */
   unsigned int l2size,	 	/* level-2 table size (if relevant) */
   unsigned int shift_width,	/* history register width */
-  unsigned int xor)	    	/* history xor address flag */
+  unsigned int xor,	    	/* history xor address flag */
+////////////////////////////////////////////////////////////////////////////////////////
+  unsigned int hist_width)	/*global history register width*/
+////////////////////////////////////////////////////////////////////////////////////////
 {
   struct bpred_dir_t *pred_dir;
   unsigned int cnt;
@@ -242,6 +247,52 @@ bpred_dir_create (
 
       break;
     }
+//////////////////////////////////////////////////////////////////////////////////////////////////
+case BPredALLOYED:
+    {
+      if (!l1size || (l1size & (l1size-1)) != 0)
+	fatal("level-1 size, `%d', must be non-zero and a power of two", 
+	      l1size);
+      pred_dir->config.two.l1size = l1size;
+      
+      if (!l2size || (l2size & (l2size-1)) != 0)
+	fatal("level-2 size, `%d', must be non-zero and a power of two", 
+	      l2size);
+      pred_dir->config.two.l2size = l2size;
+      
+      if (!shift_width || shift_width > 30)
+	fatal("shift register width, `%d', must be non-zero and positive",
+	      shift_width);
+      pred_dir->config.two.shift_width = shift_width;
+
+      if (!hist_width || hist_width > 30)
+	fatal("shift global register width, `%d', must be non-zero and positive",
+	      hist_width);
+      pred_dir->config.two.hist_width = hist_width;
+
+      pred_dir->config.two.shiftregs = calloc(l1size, sizeof(int));
+      if (!pred_dir->config.two.shiftregs)
+	fatal("cannot allocate shift register table");
+      
+      pred_dir->config.two.l2table = calloc(l2size, sizeof(unsigned char));
+      if (!pred_dir->config.two.l2table)
+	fatal("cannot allocate second level table");
+
+      pred_dir->config.two.shiftGlobregs = calloc(1, sizeof(unsigned char));
+      if (!pred_dir->config.two.shiftGlobregs)
+	fatal("cannot allocate global history register");
+
+      /* initialize counters to weakly this-or-that */
+      flipflop = 1;
+      for (cnt = 0; cnt < l2size; cnt++)
+	{
+	  pred_dir->config.two.l2table[cnt] = flipflop;
+	  flipflop = 3 - flipflop;
+	}
+
+      break;
+    }
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
   case BPred2bit:
     if (!l1size || (l1size & (l1size-1)) != 0)
@@ -288,6 +339,15 @@ bpred_dir_config(
       pred_dir->config.two.xor ? "" : "no", pred_dir->config.two.l2size);
     break;
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+  case BPredALLOYED:
+    fprintf(stream,
+      "pred_dir: %s: 2-lvl: %d l1-sz, %d bits/ent, %i GBHR bits, %d l2-sz, direct-mapped\n",
+      name, pred_dir->config.two.l1size, pred_dir->config.two.shift_width,
+      pred_dir->config.two.hist_width, pred_dir->config.two.l2size);
+    break;
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
   case BPred2bit:
     fprintf(stream, "pred_dir: %s: 2-bit: %d entries, direct-mapped\n",
       name, pred_dir->config.bimod.size);
@@ -327,6 +387,15 @@ bpred_config(struct bpred_t *pred,	/* branch predictor instance */
 	    pred->btb.sets, pred->btb.assoc);
     fprintf(stream, "ret_stack: %d entries", pred->retstack.size);
     break;
+
+//////////////////////////////////////////////////////////////////////////////////
+  case BPredALLOYED:
+    bpred_dir_config (pred->dirpred.alloy, "alloy", stream);
+    fprintf(stream, "btb: %d sets x %d associativity", 
+	    pred->btb.sets, pred->btb.assoc);
+    fprintf(stream, "ret_stack: %d entries", pred->retstack.size);
+    break;
+//////////////////////////////////////////////////////////////////////////////////
 
   case BPred2bit:
     bpred_dir_config (pred->dirpred.bimod, "bimod", stream);
@@ -374,6 +443,11 @@ bpred_reg_stats(struct bpred_t *pred,	/* branch predictor instance */
     case BPred2Level:
       name = "bpred_2lev";
       break;
+/////////////////////////////////////////////////
+    case BPredALLOYED:
+      name = "bpred_alloyed";
+      break;
+/////////////////////////////////////////////////
     case BPred2bit:
       name = "bpred_bimod";
       break;
@@ -540,6 +614,33 @@ bpred_dir_lookup(struct bpred_dir_t *pred_dir,	/* branch dir predictor inst */
         p = &pred_dir->config.two.l2table[l2index];
       }
       break;
+////////////////////////////////////////////////////////////////////////////////////////////////
+    case BPredALLOYED:
+      {
+	int index, l2index;
+
+        /* traverse 2-level tables */
+        index = (baddr >> MD_BR_SHIFT) & (pred_dir->config.two.l1size - 1); 	/*Obtenim el punter a la posicó de la PaBHT*/
+        index = pred_dir->config.two.shiftregs[index];				/*Obtenim el valor en la PaBHT*/
+	/*ens quedem amb els shift_width bits de menys pes, per fer-ho elevem 2 a shift_width 
+	(1 << pred_dir->config.two.shift_width) i restem 1 per obtenir la màscara necessària*/
+	l2index = index & ((1 << pred_dir->config.two.shift_width) - 1);	/*obtenim p, els bits de menys pes del punter a la PHT*/
+	
+	index = pred_dir->config.two.shiftGlobregs[0];				/*Obtenim el valor en el GBHR*/
+	index = index & ((1 << pred_dir->config.two.hist_width) - 1);		/*obtenim g*/
+	l2index = l2index | (index << pred_dir->config.two.shift_width);	/*index a la PHT (c) ja té dos dels valors g-p*/
+	
+	/*Obtenim un punter de 32 bits a la PHT on els bits de menys pes venen de la PaBHT, els mitjans del GBHR i els de més pes del PC*/
+	l2index = l2index | ((baddr >> MD_BR_SHIFT) << (pred_dir->config.two.shift_width+pred_dir->config.two.hist_width)); 
+	
+	/*Obtenim el punter a la PHT amb els bits necessaris*/
+        l2index = l2index & (pred_dir->config.two.l2size - 1);
+
+        /* get a pointer to prediction state information */
+        p = &pred_dir->config.two.l2table[l2index];
+      }
+      break;
+////////////////////////////////////////////////////////////////////////////////////////////////
     case BPred2bit:
       p = &pred_dir->config.bimod.table[BIMOD_HASH(pred_dir, baddr)];
       break;
@@ -619,6 +720,15 @@ bpred_lookup(struct bpred_t *pred,	/* branch predictor instance */
 	    bpred_dir_lookup (pred->dirpred.twolev, baddr);
 	}
       break;
+/////////////////////////////////////////////////////////////////////////////////
+    case BPredALLOYED:
+      if ((MD_OP_FLAGS(op) & (F_CTRL|F_UNCOND)) != (F_CTRL|F_UNCOND))
+	{
+	  dir_update_ptr->pdir1 =
+	    bpred_dir_lookup (pred->dirpred.alloy, baddr);
+	}
+      break;
+/////////////////////////////////////////////////////////////////////////////////
     case BPred2bit:
       if ((MD_OP_FLAGS(op) & (F_CTRL|F_UNCOND)) != (F_CTRL|F_UNCOND))
 	{
@@ -849,6 +959,23 @@ bpred_update(struct bpred_t *pred,	/* branch predictor instance */
       pred->dirpred.twolev->config.two.shiftregs[l1index] =
 	shift_reg & ((1 << pred->dirpred.twolev->config.two.shift_width) - 1);
     }
+//////////////////////////////////////////////////////////////////////////////////////////////////
+ if ((MD_OP_FLAGS(op) & (F_CTRL|F_UNCOND)) != (F_CTRL|F_UNCOND) &&
+      (pred->class == BPredALLOYED))
+    {
+      int l1index, shift_reg;
+      
+      /* also update appropriate L1 history register */
+      l1index = (baddr >> MD_BR_SHIFT) & (pred->dirpred.alloy->config.two.l1size - 1);
+      shift_reg = (pred->dirpred.alloy->config.two.shiftregs[l1index] << 1) | (!!taken);
+      pred->dirpred.alloy->config.two.shiftregs[l1index] = 
+				shift_reg & ((1 << pred->dirpred.alloy->config.two.shift_width) - 1);
+      /* also update appropriate GBHR */
+      shift_reg = (pred->dirpred.alloy->config.two.shiftGlobregs[0] << 1) | (!!taken);
+      pred->dirpred.alloy->config.two.shiftGlobregs[0] = 
+				shift_reg & ((1 << pred->dirpred.alloy->config.two.hist_width) - 1);
+    }
+//////////////////////////////////////////////////////////////////////////////////////////////////
 
   /* find BTB entry if it's a taken branch (don't allocate for non-taken) */
   if (taken)

@@ -123,6 +123,13 @@ static int twolev_nelt = 4;
 static int twolev_config[4] =
   { /* l1size */1, /* l2size */1024, /* hist */8, /* xor */FALSE};
 
+/////////////////////////////////////////////////////////////////////////////////
+/* 3-level predictor config (<l1size> <l2size> <hist_size> <hist_width>) */
+static int alloy_nelt = 4;
+static int alloy_config[4] =
+  { /* l1size */128, /* l2size */2048, /* hist */4, /* Ghist */4};
+/////////////////////////////////////////////////////////////////////////////////
+
 /* combining predictor config (<meta_table_size> */
 static int comb_nelt = 1;
 static int comb_config[1] =
@@ -915,12 +922,12 @@ sim_check_options(struct opt_odb_t *odb,        /* options database */
   else if (!mystricmp(pred_type, "taken"))
     {
       /* static predictor, not taken */
-      pred = bpred_create(BPredTaken, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+      pred = bpred_create(BPredTaken, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
     }
   else if (!mystricmp(pred_type, "nottaken"))
     {
       /* static predictor, taken */
-      pred = bpred_create(BPredNotTaken, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+      pred = bpred_create(BPredNotTaken, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
     }
   else if (!mystricmp(pred_type, "bimod"))
     {
@@ -937,6 +944,7 @@ sim_check_options(struct opt_odb_t *odb,        /* options database */
 			  /* 2lev l2 size */0,
 			  /* meta table size */0,
 			  /* history reg size */0,
+			  /* alloy GBHR reg size*/0,
 			  /* history xor address */0,
 			  /* btb sets */btb_config[0],
 			  /* btb assoc */btb_config[1],
@@ -956,6 +964,7 @@ sim_check_options(struct opt_odb_t *odb,        /* options database */
 			  /* 2lev l2 size */twolev_config[1],
 			  /* meta table size */0,
 			  /* history reg size */twolev_config[2],
+			  /* alloy GBHR reg size*/0,
 			  /* history xor address */twolev_config[3],
 			  /* btb sets */btb_config[0],
 			  /* btb assoc */btb_config[1],
@@ -977,6 +986,7 @@ sim_check_options(struct opt_odb_t *odb,        /* options database */
 		/* meta table size */0,
 		/* history reg size */alloy_config[2],		//nombre de prediccons emmagatemades en PaBHT
 		/* alloy GBHR reg size*/alloy_config[3],	//nombre de prediccons emmagatemades en GBHR
+		/* history xor address */0,
 		/* btb sets */btb_config[0],
 		/* btb assoc */btb_config[1],
 		/* ret-addr stack size */ras_size);
@@ -1001,6 +1011,7 @@ sim_check_options(struct opt_odb_t *odb,        /* options database */
 			  /* l2 size */twolev_config[1],
 			  /* meta table size */comb_config[0],
 			  /* history reg size */twolev_config[2],
+			  /* alloy GBHR reg size*/0,
 			  /* history xor address */twolev_config[3],
 			  /* btb sets */btb_config[0],
 			  /* btb assoc */btb_config[1],

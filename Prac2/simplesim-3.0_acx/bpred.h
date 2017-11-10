@@ -144,6 +144,9 @@ struct bpred_t {
   struct {
     struct bpred_dir_t *bimod;	  /* first direction predictor */
     struct bpred_dir_t *twolev;	  /* second direction predictor */
+///////////////////////////////////////////////////////////////////////////////////
+    struct bpred_dir_t *alloy;	  /* third direction predictor */
+///////////////////////////////////////////////////////////////////////////////////
     struct bpred_dir_t *meta;	  /* meta predictor */
   } dirpred;
 
@@ -198,6 +201,9 @@ bpred_create(enum bpred_class class,	/* type of predictor to create */
 	     unsigned int l2size,	/* level-2 table size */
 	     unsigned int meta_size,	/* meta predictor table size */
 	     unsigned int shift_width,	/* history register width */
+////////////////////////////////////////////////////////////////////////////////////
+	     unsigned int hist_width,	/* history register width */
+////////////////////////////////////////////////////////////////////////////////////
 	     unsigned int xor,		/* history xor address flag */
 	     unsigned int btb_sets,	/* number of sets in BTB */ 
 	     unsigned int btb_assoc,	/* BTB associativity */
@@ -210,7 +216,10 @@ bpred_dir_create (
   unsigned int l1size,		/* level-1 table size */
   unsigned int l2size,		/* level-2 table size (if relevant) */
   unsigned int shift_width,	/* history register width */
-  unsigned int xor);	   	/* history xor address flag */
+  unsigned int xor,		/* history xor address flag */
+////////////////////////////////////////////////////////////////////////////////////////
+  unsigned int hist_width);	/*global history register width*/
+////////////////////////////////////////////////////////////////////////////////////////	   	
 
 /* print branch predictor configuration */
 void

@@ -1,0 +1,10 @@
+bpred_gskew.bpred_dir_rate    0.7129 # branch direction-prediction rate (i.e., all-hits/updates)
+bpred_gskew.bpred_dir_rate    0.7402 # branch direction-prediction rate (i.e., all-hits/updates)
+bpred_gskew.bpred_dir_rate    0.8237 # branch direction-prediction rate (i.e., all-hits/updates)
+bpred_gskew.bpred_dir_rate    0.8520 # branch direction-prediction rate (i.e., all-hits/updates)
+bpred_gskew.bpred_dir_rate    0.8630 # branch direction-prediction rate (i.e., all-hits/updates)
+sim_IPC                      1.2473 # instructions per cycle
+sim_IPC                      1.2789 # instructions per cycle
+sim_IPC                      1.3776 # instructions per cycle
+sim_IPC                      1.4237 # instructions per cycle
+sim_IPC                      1.4488 # instructions per cycle

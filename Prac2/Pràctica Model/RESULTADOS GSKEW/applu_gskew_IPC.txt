@@ -1,0 +1,13 @@
+sim_IPC                      0.7878 # instructions per cycle
+sim_IPC                      0.7860 # instructions per cycle
+sim_IPC                      0.7912 # instructions per cycle
+sim_IPC                      0.7913 # instructions per cycle
+sim_IPC                      0.7914 # instructions per cycle
+bpred_gskew.bpred_dir_rate    0.6829 # branch direction-prediction rate (i.e., all-hits/updates)
+bpred_gskew.bpred_dir_rate    0.7229 # branch direction-prediction rate (i.e., all-hits/updates)
+bpred_gskew.bpred_dir_rate    0.7707 # branch direction-prediction rate (i.e., all-hits/updates)
+bpred_gskew.bpred_dir_rate    0.7734 # branch direction-prediction rate (i.e., all-hits/updates)
+bpred_gskew.bpred_dir_rate    0.7745 # branch direction-prediction rate (i.e., all-hits/updates)
+
+
+2>&1 | grep dir_rate >> ~/Desktop/

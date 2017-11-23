@@ -3,4 +3,4 @@
 -mem:lat 300 2
 -mem:width 32
 -bpred alloy 
--bpred:alloy 32 128  4 4
+-bpred:alloy 64 4096 4 4

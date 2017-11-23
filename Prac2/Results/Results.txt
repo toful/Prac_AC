@@ -1,0 +1,15 @@
+applu.txt:sim_IPC                      2.0659 # instructions per cycle
+crafty.txt:sim_IPC                      1.0262 # instructions per cycle
+twolf.txt:sim_IPC                      2.0800 # instructions per cycle
+vortex.txt:sim_IPC                      1.1017 # instructions per cycle
+vpr.txt:sim_IPC                      1.6517 # instructions per cycle
+applu.txt:bpred_alloyed.bpred_addr_rate    0.9972 # branch address-prediction rate (i.e., addr-hits/updates)
+crafty.txt:bpred_alloyed.bpred_addr_rate    0.8921 # branch address-prediction rate (i.e., addr-hits/updates)
+twolf.txt:bpred_alloyed.bpred_addr_rate    0.9771 # branch address-prediction rate (i.e., addr-hits/updates)
+vortex.txt:bpred_alloyed.bpred_addr_rate    0.9002 # branch address-prediction rate (i.e., addr-hits/updates)
+vpr.txt:bpred_alloyed.bpred_addr_rate    0.9456 # branch address-prediction rate (i.e., addr-hits/updates)
+applu.txt:bpred_alloyed.bpred_dir_rate    0.9972 # branch direction-prediction rate (i.e., all-hits/updates)
+crafty.txt:bpred_alloyed.bpred_dir_rate    0.9021 # branch direction-prediction rate (i.e., all-hits/updates)
+twolf.txt:bpred_alloyed.bpred_dir_rate    0.9772 # branch direction-prediction rate (i.e., all-hits/updates)
+vortex.txt:bpred_alloyed.bpred_dir_rate    0.9087 # branch direction-prediction rate (i.e., all-hits/updates)
+vpr.txt:bpred_alloyed.bpred_dir_rate    0.9479 # branch direction-prediction rate (i.e., all-hits/updates)

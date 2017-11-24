@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cc -o qs_merge_ac.c -o qs.merge_ac -lpthread
+time ./qs_merge_ac 8000000 16

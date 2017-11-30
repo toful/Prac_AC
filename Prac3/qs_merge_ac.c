@@ -140,7 +140,8 @@ main(int nargs,char* args[])
 
   //VAriables necessàries per crear els threads
   pthread_t threads[parts];
-  arg_qs_struct args_qs;
+  arg_qs_struct args_qs[parts];
+  arg_merge_struct args_merge[parts];
 
   for(i=0;i<ndades;i++) valors[i]=rand()%MAX_INT;
 
@@ -152,9 +153,9 @@ main(int nargs,char* args[])
   for (i=0;i<parts;i++)
   {
     //qs(&valors[i*ndades/parts],ndades/parts);
-    args_qs.val = &valors[i*ndades/parts];
-    args_qs.ne = ndades/parts;
-    pthread_create(&threads[i], NULL, qs_thread, &args_qs);
+    args_qs[i].val = &valors[i*ndades/parts];
+    args_qs[i].ne = ndades/parts;
+    pthread_create(&threads[i], NULL, qs_thread, &args_qs[i]);
   }
 
   //Esperem a que finalitzen tots els threads
@@ -168,16 +169,15 @@ main(int nargs,char* args[])
 // al thread principal
   vin = valors;
   vout = valors2;
-  arg_merge_struct args_merge;
   for (m = 2*ndades/parts; m <= ndades; m *= 2)
   {
     j=0;
     for (i = 0; i < ndades; i += m){
       //merge2(&vin[i],m,&vout[i]);
-      args_merge.val = &vin[i];
-      args_merge.n = m;
-      args_merge.vo = &vout[i];
-      pthread_create(&threads[j], NULL, merge_thread, &args_merge);
+      args_merge[j].val = &vin[i];
+      args_merge[j].n = m;
+      args_merge[j].vo = &vout[i];
+      pthread_create(&threads[j], NULL, merge_thread, &args_merge[j]);
       j++;
 
     }

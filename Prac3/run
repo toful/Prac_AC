@@ -1,4 +1,5 @@
 #!/bin/bash
 
-cc -o qs_merge_ac.c -o qs.merge_ac -lpthread
+cc qs_merge_ac.c -o qs_merge_ac -lpthread
+chmod u+x qs_merge_ac
 time ./qs_merge_ac 8000000 16

@@ -207,7 +207,7 @@ main(int nargs,char* args[])
   vin=valors;
  */
 
-  //for (i=1;i<ndades;i++) assert(vin[i-1]<=vin[i]);
+  for (i=1;i<ndades;i++) assert(vin[i-1]<=vin[i]);
   for (i=0;i<ndades;i+=100)
     sum += vin[i];
   printf("validacio %lld \n",sum);
